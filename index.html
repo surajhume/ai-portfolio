@@ -142,6 +142,96 @@
             border-radius: 50%;
             filter: blur(55px);
         }
+        
+/* Formatting for AI-generated Markdown */
+.assistant-message p {
+    margin: 0 0 10px;
+    line-height: 1.7;
+}
+
+.assistant-message p:last-child {
+    margin-bottom: 0;
+}
+
+.assistant-message h1,
+.assistant-message h2,
+.assistant-message h3 {
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.4;
+    margin: 14px 0 7px;
+}
+
+.assistant-message h1 {
+    font-size: 1.15rem;
+}
+
+.assistant-message h2 {
+    font-size: 1.05rem;
+}
+
+.assistant-message h3 {
+    font-size: 0.95rem;
+}
+
+.assistant-message ul,
+.assistant-message ol {
+    margin: 8px 0 12px;
+    padding-left: 22px;
+}
+
+.assistant-message ul {
+    list-style-type: disc;
+}
+
+.assistant-message ol {
+    list-style-type: decimal;
+}
+
+.assistant-message li {
+    margin: 5px 0;
+    padding-left: 2px;
+}
+
+.assistant-message strong {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.assistant-message a {
+    color: #2563eb;
+    text-decoration: underline;
+    overflow-wrap: anywhere;
+}
+
+.assistant-message code {
+    background: #f1f5f9;
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 0.9em;
+    overflow-wrap: anywhere;
+}
+
+.assistant-message pre {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+.assistant-message pre code {
+    padding: 0;
+    background: transparent;
+}
+
+.assistant-message blockquote {
+    border-left: 3px solid #cbd5e1;
+    padding-left: 12px;
+    margin: 10px 0;
+    color: #475569;
+}
+
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between relative selection:bg-blue-100 selection:text-blue-900">
@@ -585,35 +675,58 @@ When responding to users, stay grounded in Suraj's actual background and highlig
             callGeminiApi(query);
         }
 
-        function appendMessage(role, text) {
-            const windowEl = document.getElementById('chat-window');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
+        
+function appendMessage(role, text) {
+    const windowEl = document.getElementById('chat-window');
+    const messageDiv = document.createElement('div');
 
-            const formattedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;').replace(/\n/g, '<br>');
+    messageDiv.className = role === 'user'
+        ? 'flex justify-end'
+        : 'flex justify-start';
 
-            if (role === 'user') {
-                messageDiv.innerHTML = `
-                    <div class="bg-blue-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-none text-xs sm:text-sm max-w-[85%] shadow-sm">
-                        ${formattedText}
-                    </div>
-                `;
-            } else {
-                messageDiv.innerHTML = `
-                    <div class="flex items-start space-x-2 max-w-[90%]">
-                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-1">
-                            AI
-                        </div>
-                        <div class="bg-white text-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-none text-xs sm:text-sm border border-slate-200/80 shadow-sm leading-relaxed">
-                            ${formattedText}
-                        </div>
-                    </div>
-                `;
-            }
+    if (role === 'user') {
+        // User messages remain plain text for safety.
+        const bubble = document.createElement('div');
+        bubble.className =
+            'bg-blue-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-none text-xs sm:text-sm max-w-[85%] shadow-sm whitespace-pre-wrap break-words';
+        bubble.textContent = text;
 
-            windowEl.appendChild(messageDiv);
-            windowEl.scrollTop = windowEl.scrollHeight;
+        messageDiv.appendChild(bubble);
+    } else {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'flex items-start space-x-2 max-w-[95%] min-w-0';
+
+        const avatar = document.createElement('div');
+        avatar.className =
+            'w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-1';
+        avatar.textContent = 'AI';
+
+        const bubble = document.createElement('div');
+        bubble.className =
+            'assistant-message bg-white text-slate-800 px-4 py-3 rounded-2xl rounded-tl-none text-xs sm:text-sm border border-slate-200/80 shadow-sm leading-relaxed min-w-0 break-words';
+
+        // Convert Markdown to HTML and sanitize it before rendering.
+        if (window.marked && window.DOMPurify) {
+            const renderedHtml = window.marked.parse(text, {
+                breaks: true,
+                gfm: true
+            });
+
+            bubble.innerHTML = window.DOMPurify.sanitize(renderedHtml);
+        } else {
+            // Safe fallback if either library fails to load.
+            bubble.textContent = text;
         }
+
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(bubble);
+        messageDiv.appendChild(wrapper);
+    }
+
+    windowEl.appendChild(messageDiv);
+    windowEl.scrollTop = windowEl.scrollHeight;
+}
+
 
        // Secure Serverless Gemini API Call
 async function callGeminiApi(userQuery) {
