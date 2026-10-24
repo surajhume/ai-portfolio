@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suraj Hume | Gen AI Engineer & Python Developer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite alternate ease-in-out',
+                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1) rotate(0deg)' },
+                            '33%': { transform: 'translate(40px, -50px) scale(1.1) rotate(120deg)' },
+                            '66%': { transform: 'translate(-20px, 30px) scale(0.95) rotate(240deg)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1) rotate(360deg)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-12px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fafafa;
+            color: #0f172a;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+            border-color: rgba(147, 197, 253, 0.8);
+        }
+
+        /* Custom scrollbar for chat */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Gradient Aura Mesh */
+        .aura-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 600px;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .aura-1 {
+            position: absolute;
+            top: -10%;
+            left: 20%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(216, 180, 254, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        .aura-2 {
+            position: absolute;
+            top: 5%;
+            right: 15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .aura-3 {
+            position: absolute;
+            top: 20%;
+            left: 35%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(254, 215, 170, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(55px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Fluid Background Aura -->
+    <div class="aura-container">
+        <div class="aura-1 animate-blob"></div>
+        <div class="aura-2 animate-blob" style="animation-delay: 3s;"></div>
+        <div class="aura-3 animate-blob" style="animation-delay: 6s;"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="w-full max-w-5xl mx-auto px-4 pt-6 pb-2 flex justify-between items-center z-10">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-slate-900 to-slate-700 text-white flex items-center justify-center font-bold text-lg shadow-md hover:scale-105 transition-transform cursor-pointer">
+                SH
+            </div>
+            <span class="font-bold text-slate-800 text-lg tracking-tight hidden sm:inline-block">Suraj Hume</span>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <div class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/80 border border-slate-200 text-slate-700 flex items-center shadow-sm">
+                <i class="fa-solid fa-shield-halved text-emerald-500 mr-2"></i>
+                <span>AI Assistant</span>
+            </div>
+
+            <a href="https://www.linkedin.com/in/surajhume" target="_blank" class="w-9 h-9 rounded-full bg-white/80 border border-slate-200 text-slate-700 hover:text-blue-600 flex items-center justify-center transition-all shadow-sm">
+                <i class="fa-brands fa-linkedin-in text-sm"></i>
+            </a>
+            <a href="mailto:surajhume2@gmail.com" class="w-9 h-9 rounded-full bg-white/80 border border-slate-200 text-slate-700 hover:text-red-500 flex items-center justify-center transition-all shadow-sm">
+                <i class="fa-regular fa-envelope text-sm"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-4xl mx-auto px-4 pt-4 pb-12 flex-grow flex flex-col items-center">
+        
+        <!-- Hero Avatar & Intro -->
+        <div class="text-center flex flex-col items-center mt-2 mb-6">
+            
+            <!-- Animated Interactive Avatar -->
+            <div class="relative group cursor-pointer mb-4" onclick="triggerAvatarReaction()">
+                <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-b from-blue-100 to-indigo-50 p-1 shadow-xl relative animate-float">
+                    <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center border-2 border-white relative">
+                        <!-- Custom Stylized 3D Avatar Graphics -->
+                        <div id="avatar-container" class="relative w-full h-full flex items-center justify-center bg-gradient-to-tr from-sky-100 via-purple-50 to-amber-50">
+                            <!-- SVG Avatar / Tech Head -->
+                            <svg class="w-24 h-24 transform transition-transform duration-300 group-hover:scale-110" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Hair Back -->
+                                <path d="M35 50C35 28 48 18 60 18C72 18 85 28 85 50V60H35V50Z" fill="#2D1500"/>
+                                <!-- Head/Face -->
+                                <rect x="38" y="38" width="44" height="48" rx="22" fill="#F0C5A0"/>
+                                <!-- Hair Front -->
+                                <path d="M35 42C38 32 50 20 60 20C70 20 82 28 85 36C80 34 72 32 60 35C48 38 40 40 35 42Z" fill="#3D1E03"/>
+                                <!-- Eyes -->
+                                <circle id="left-eye" cx="50" cy="54" r="4.5" fill="#1E293B"/>
+                                <circle id="right-eye" cx="70" cy="54" r="4.5" fill="#1E293B"/>
+                                <circle cx="51.5" cy="52.5" r="1.5" fill="white"/>
+                                <circle cx="71.5" cy="52.5" r="1.5" fill="white"/>
+                                <!-- Eyebrows -->
+                                <path d="M45 47C48 45 53 46 54 47" stroke="#3D1E03" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M66 47C67 46 72 45 75 47" stroke="#3D1E03" stroke-width="2" stroke-linecap="round"/>
+                                <!-- Nose -->
+                                <path d="M60 56V62L58 63" stroke="#D89A6F" stroke-width="2" stroke-linecap="round"/>
+                                <!-- Smile -->
+                                <path id="avatar-smile" d="M52 70C56 74 64 74 68 70" stroke="#C07040" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Status Badge -->
+                <div class="absolute bottom-1 right-1 bg-emerald-500 text-white p-1.5 rounded-full border-2 border-white shadow-md flex items-center justify-center text-xs" title="Available for Gen AI Roles">
+                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                </div>
+            </div>
+
+            <!-- Title Header -->
+            <div class="inline-flex items-center space-x-2 bg-white/80 border border-slate-200/80 px-3.5 py-1 rounded-full text-xs font-semibold text-slate-600 mb-2 shadow-sm">
+                <span>Nagpur, India</span>
+                <span>•</span>
+                <span class="text-blue-600">Gen AI & Python Engineer</span>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mt-1 mb-2">
+                Hey, I'm Suraj <span class="inline-block animate-bounce">👋</span>
+            </h1>
+            <p class="text-slate-600 font-medium text-base sm:text-lg max-w-xl">
+                Building scalable backend services, LangGraph Agentic AI workflows & RAG pipelines at TCS.
+            </p>
+        </div>
+
+        <!-- Interactive AI Chat Terminal Section -->
+        <div class="w-full max-w-2xl glass-card rounded-3xl p-4 sm:p-6 mb-8 border border-white/80 shadow-xl transition-all">
+            
+            <!-- Chat Response Window (Hidden by default, shown when chatting) -->
+            <div id="chat-window" class="hidden mb-4 max-h-80 overflow-y-auto custom-scrollbar p-3 space-y-3 rounded-2xl bg-slate-50/80 border border-slate-200/60">
+                <!-- Messages render dynamically here -->
+            </div>
+
+            <!-- Input Box -->
+            <div class="relative flex items-center">
+                <input type="text" id="user-input" 
+                    placeholder="Ask me anything about Suraj's skills, experience, or projects..." 
+                    onkeydown="if(event.key === 'Enter') handleSend();"
+                    class="w-full py-3.5 pl-5 pr-14 rounded-full bg-white/90 text-slate-800 placeholder-slate-400 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base shadow-inner transition-all">
+                <button onclick="handleSend()" id="send-btn" 
+                    class="absolute right-2 w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all">
+                    <i class="fa-solid fa-arrow-up text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Quick Pill Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4">
+                <button onclick="quickPrompt('me')" class="glass-pill px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                    <i class="fa-regular fa-face-smile text-emerald-500"></i>
+                    <span>Me</span>
+                </button>
+                <button onclick="quickPrompt('experience')" class="glass-pill px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-briefcase text-blue-500"></i>
+                    <span>Experience</span>
+                </button>
+                <button onclick="quickPrompt('skills')" class="glass-pill px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-layer-group text-purple-500"></i>
+                    <span>Skills</span>
+                </button>
+                <button onclick="quickPrompt('projects')" class="glass-pill px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-robot text-amber-500"></i>
+                    <span>Gen AI Work</span>
+                </button>
+                <button onclick="quickPrompt('contact')" class="glass-pill px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-paper-plane text-rose-500"></i>
+                    <span>Contact</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Structured Portfolio Content Tabs -->
+        <div class="w-full max-w-3xl">
+            <!-- Section Navigation Buttons -->
+            <div class="flex justify-center space-x-2 mb-6 border-b border-slate-200/80 pb-3 overflow-x-auto">
+                <button onclick="switchTab('about')" id="tab-btn-about" class="px-4 py-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600 transition-all">
+                    About
+                </button>
+                <button onclick="switchTab('experience')" id="tab-btn-experience" class="px-4 py-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all">
+                    Experience
+                </button>
+                <button onclick="switchTab('skills')" id="tab-btn-skills" class="px-4 py-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all">
+                    Tech Stack
+                </button>
+                <button onclick="switchTab('education')" id="tab-btn-education" class="px-4 py-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all">
+                    Education
+                </button>
+            </div>
+
+            <!-- Tab Content Container -->
+            <div id="tab-content" class="space-y-6">
+                
+                <!-- ABOUT TAB -->
+                <div id="tab-about" class="tab-pane block space-y-4">
+                    <div class="glass-card rounded-2xl p-6 border border-white/80">
+                        <h2 class="text-xl font-bold text-slate-900 mb-3 flex items-center">
+                            <i class="fa-solid fa-user-astronaut text-blue-600 mr-3"></i>
+                            Professional Overview
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+                            Experienced Gen AI Engineer and Python Developer at <strong>Tata Consultancy Services (TCS)</strong>, Nagpur. I specialize in building scalable backend services, Agentic AI workflows using <strong>LangGraph</strong>, and enterprise high-accuracy <strong>RAG (Retrieval-Augmented Generation)</strong> pipelines. 
+                        </p>
+                        <p class="text-slate-600 leading-relaxed text-sm sm:text-base mt-3">
+                            My core expertise lies in designing microservices with Python, REST APIs (FastAPI & Flask), vector databases (FAISS, Chroma), and deploying intelligent AI systems across AWS and Azure environments.
+                        </p>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                            <div class="bg-blue-50/60 p-3.5 rounded-xl text-center border border-blue-100">
+                                <div class="text-xl sm:text-2xl font-extrabold text-blue-600">2+</div>
+                                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">Years Experience</div>
+                            </div>
+                            <div class="bg-emerald-50/60 p-3.5 rounded-xl text-center border border-emerald-100">
+                                <div class="text-xl sm:text-2xl font-extrabold text-emerald-600">20%</div>
+                                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">Ticket Reductions</div>
+                            </div>
+                            <div class="bg-purple-50/60 p-3.5 rounded-xl text-center border border-purple-100">
+                                <div class="text-xl sm:text-2xl font-extrabold text-purple-600">40%</div>
+                                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">Faster Dev Time</div>
+                            </div>
+                            <div class="bg-amber-50/60 p-3.5 rounded-xl text-center border border-amber-100">
+                                <div class="text-xl sm:text-2xl font-extrabold text-amber-600">85%+</div>
+                                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">PyTest Coverage</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPERIENCE TAB -->
+                <div id="tab-experience" class="tab-pane hidden space-y-4">
+                    <!-- TCS Role 2: Gen AI Engineer -->
+                    <div class="glass-card rounded-2xl p-6 border border-white/80">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Gen AI Engineer (Chatbot Developer)</h3>
+                                <div class="text-sm font-semibold text-blue-600">Tata Consultancy Services, Nagpur</div>
+                            </div>
+                            <span class="mt-2 sm:mt-0 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                2024 - Present
+                            </span>
+                        </div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-slate-600 list-disc list-inside">
+                            <li>Architected <strong>Agentic AI workflows</strong> with LangGraph, custom tools, memory management, and chains to orchestrate complex business process automation.</li>
+                            <li>Engineered end-to-end <strong>RAG pipelines</strong> using LangChain and Vector DBs (FAISS, Chroma) for chatbot queries against internal knowledge bases with high retrieval accuracy.</li>
+                            <li>Designed high-performance microservices using <strong>FastAPI and Flask</strong> with Pydantic validation.</li>
+                            <li>Streamlined IT Service Management (ITSM) workflows with Python automation, reducing overall ticketing volume by 20%.</li>
+                            <li>Optimized document ingestion pipelines using advanced chunking strategies and embedding models (OpenAI, Hugging Face).</li>
+                        </ul>
+                    </div>
+
+                    <!-- TCS Role 1: Python Developer -->
+                    <div class="glass-card rounded-2xl p-6 border border-white/80">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Python Developer</h3>
+                                <div class="text-sm font-semibold text-blue-600">Tata Consultancy Services, Nagpur</div>
+                            </div>
+                            <span class="mt-2 sm:mt-0 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                                2024 - Present
+                            </span>
+                        </div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-slate-600 list-disc list-inside">
+                            <li>Developed secure RESTful APIs using Flask and FastAPI with JWT-based authentication.</li>
+                            <li>Managed relational databases using <strong>MySQL & PostgreSQL</strong>; wrote optimized SQL queries and built ETL pipelines using Pandas & NumPy.</li>
+                            <li>Deployed applications on AWS (EC2, S3) and utilized shell scripting to automate setup, reducing manual effort by 30%.</li>
+                            <li>Achieved 85%+ PyTest code coverage and implemented asynchronous programming (async/await) for improved throughput.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- SKILLS TAB -->
+                <div id="tab-skills" class="tab-pane hidden space-y-4">
+                    <div class="glass-card rounded-2xl p-6 border border-white/80">
+                        <h3 class="text-base font-bold text-slate-900 mb-4">Technical Capabilities</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Generative AI & LLMs</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">LangGraph</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">LangChain</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">RAG Pipelines</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">Transformers & LLMs</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">Vector DBs (FAISS, Chroma)</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Prompt Engineering</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">PyTorch</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Backend & Programming</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Python</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">FastAPI</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Flask</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Django</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">C / C++</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">Bash Shell</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Cloud, DevOps & Data</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">AWS (EC2, S3, Lambda, EMR, Redshift)</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">Azure</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">Docker & Kubernetes</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">PySpark & ETL</span>
+                                    <span class="px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">PostgreSQL / MySQL / Oracle</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EDUCATION TAB -->
+                <div id="tab-education" class="tab-pane hidden space-y-4">
+                    <div class="glass-card rounded-2xl p-6 border border-white/80">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Bachelor of Engineering</h3>
+                                <div class="text-sm font-semibold text-slate-600">Computer Technology</div>
+                                <div class="text-xs text-slate-500 mt-1">Priyadarshini College of Engineering</div>
+                            </div>
+                            <div class="mt-2 sm:mt-0 text-left sm:text-right">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                    Grade: 79.53%
+                                </span>
+                                <div class="text-xs text-slate-500 mt-1">Graduated 2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="w-full max-w-4xl mx-auto px-4 py-6 border-t border-slate-200/60 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-3">
+        <div>
+            © 2026 Suraj Hume. Built with HTML, Tailwind & Gemini AI.
+        </div>
+        <div class="flex space-x-4 font-semibold">
+            <a href="https://www.linkedin.com/in/surajhume" target="_blank" class="hover:text-blue-600 transition-colors">LinkedIn</a>
+            <a href="mailto:surajhume2@gmail.com" class="hover:text-red-500 transition-colors">Email</a>
+            <a href="tel:+917972328659" class="hover:text-emerald-600 transition-colors">+91 7972328659</a>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // System Prompt containing Suraj Hume's complete resume details
+        const RESUME_CONTEXT = `
+You are an AI assistant representing Suraj Hume, a Gen AI Engineer and Python Developer located in Nagpur, India.
+Contact details: Email: surajhume2@gmail.com, Phone: +917972328659, LinkedIn: surajhume.
+
+Current Role:
+- Gen AI Engineer & Python Developer at Tata Consultancy Services (TCS), Nagpur (2024 - Present).
+
+Key Expertise & Accomplishments:
+1. Gen AI & Agentic AI:
+   - Architected Agentic AI workflows with LangGraph, custom tools, memory management, and chains.
+   - Built end-to-end high accuracy RAG (Retrieval-Augmented Generation) pipelines using LangChain and vector databases (FAISS, Chroma).
+   - Prompt engineering, document retrieval, semantic search, and Transformer-based models.
+   - Automated ITSM ticketing workflows using Python, reducing overall ticket volume by 20%.
+   - Reduced development lead time for new chatbot features by 40%.
+
+2. Python Development & Backend APIs:
+   - Developed secure RESTful APIs using Flask and FastAPI with JWT authentication.
+   - Database management with PostgreSQL, MySQL, and Oracle SQL.
+   - ETL pipelines using Pandas, NumPy, and PySpark.
+   - Asynchronous programming (async/await) and unit testing with PyTest (85%+ code coverage).
+
+3. Cloud & DevOps:
+   - AWS (EC2, S3, Lambda, EMR, Redshift) and Azure (Azure DevOps, App Services).
+   - Docker containerization and foundational Kubernetes concepts.
+   - Linux bash scripting, reducing manual setup time by 30%.
+
+4. Education:
+   - Bachelor of Engineering in Computer Technology (2023) from Priyadarshini College of Engineering (79.53%).
+
+Tone: Enthusiastic, highly articulate, tech-savvy, helpful, and concise.
+When responding to users, stay grounded in Suraj's actual background and highlight relevant skills. Keep answers friendly, succinct, and engaging.
+`;
+
+        // Local Fallback Answers for Instant Pre-configured pill buttons
+        const LOCAL_KNOWLEDGE = {
+            me: "I'm Suraj Hume, a Gen AI Engineer & Python Developer at TCS, Nagpur! I specialize in building Agentic AI workflows with LangGraph, enterprise RAG pipelines with LangChain, and high-performance microservices with FastAPI/Flask.",
+            experience: "Currently at TCS (2024-Present) working as a Gen AI Engineer & Python Developer. I've engineered Agentic AI with LangGraph, built RAG pipelines with FAISS/Chroma, reduced ticketing volumes by 20% through automated Python scripts, and built REST APIs with FastAPI/Flask.",
+            skills: "My technical stack includes:\n• AI/LLMs: LangGraph, LangChain, RAG, FAISS, Chroma, PyTorch, Transformers\n• Python & Web: FastAPI, Flask, Django, Asyncio, PyTest\n• Cloud & Data: AWS (EC2, S3, Lambda), Azure, Docker, PostgreSQL, PySpark",
+            projects: "Key Gen AI projects at TCS include:\n1. LangGraph Agentic Workflows for business process automation.\n2. Enterprise RAG Pipeline for querying knowledge bases with high accuracy.\n3. Python ITSM Ticket Automation cutting ticket volume by 20%.\n4. Low-code dialogue flows cutting dev time by 40%.",
+            contact: "You can reach me directly:\n• Email: surajhume2@gmail.com\n• Phone: +91 7972328659\n• LinkedIn: linkedin.com/in/surajhume\n• Location: Nagpur, India"
+        };
+
+        // Avatar Interactive Animation
+        function triggerAvatarReaction() {
+            const smile = document.getElementById('avatar-smile');
+            const leftEye = document.getElementById('left-eye');
+            const rightEye = document.getElementById('right-eye');
+            
+            // Wink and bigger smile
+            smile.setAttribute('d', 'M50 68C56 76 64 76 70 68');
+            leftEye.setAttribute('r', '1');
+            
+            setTimeout(() => {
+                smile.setAttribute('d', 'M52 70C56 74 64 74 68 70');
+                leftEye.setAttribute('r', '4.5');
+            }, 600);
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tab panes
+            const panes = document.querySelectorAll('.tab-pane');
+            panes.forEach(pane => pane.classList.add('hidden'));
+            
+            // Reset tab button styling
+            const buttons = ['about', 'experience', 'skills', 'education'];
+            buttons.forEach(b => {
+                const btn = document.getElementById(`tab-btn-${b}`);
+                if (btn) {
+                    btn.className = "px-4 py-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 transition-all";
+                }
+            });
+
+            // Show current tab pane
+            const currentPane = document.getElementById(`tab-${tabName}`);
+            if (currentPane) {
+                currentPane.classList.remove('hidden');
+            }
+
+            // Highlight current button
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (activeBtn) {
+                activeBtn.className = "px-4 py-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600 transition-all";
+            }
+        }
+
+        // Quick Pill Prompts
+        function quickPrompt(type) {
+            const windowEl = document.getElementById('chat-window');
+            windowEl.classList.remove('hidden');
+
+            const promptText = {
+                me: "Tell me about Suraj Hume.",
+                experience: "What is Suraj's work experience at TCS?",
+                skills: "What technologies and skills does Suraj possess?",
+                projects: "Tell me about Suraj's Gen AI and Python projects.",
+                contact: "How can I contact Suraj Hume?"
+            }[type];
+
+            appendMessage('user', promptText);
+
+            // Trigger tab view switch if applicable
+            if (type !== 'me') {
+                switchTab(type === 'projects' ? 'experience' : type);
+            }
+
+            // The API key is stored only in Vercel environment variables.
+            callGeminiApi(promptText);
+        }
+
+        // Handling User Message
+        function handleSend() {
+            const input = document.getElementById('user-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            document.getElementById('chat-window').classList.remove('hidden');
+            appendMessage('user', query);
+            input.value = '';
+
+            // The API key is stored only in Vercel environment variables.
+            callGeminiApi(query);
+        }
+
+        function appendMessage(role, text) {
+            const windowEl = document.getElementById('chat-window');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = role === 'user' ? 'flex justify-end' : 'flex justify-start';
+
+            const formattedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#39;').replace(/\n/g, '<br>');
+
+            if (role === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="bg-blue-600 text-white px-4 py-2.5 rounded-2xl rounded-tr-none text-xs sm:text-sm max-w-[85%] shadow-sm">
+                        ${formattedText}
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2 max-w-[90%]">
+                        <div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-1">
+                            AI
+                        </div>
+                        <div class="bg-white text-slate-800 px-4 py-2.5 rounded-2xl rounded-tl-none text-xs sm:text-sm border border-slate-200/80 shadow-sm leading-relaxed">
+                            ${formattedText}
+                        </div>
+                    </div>
+                `;
+            }
+
+            windowEl.appendChild(messageDiv);
+            windowEl.scrollTop = windowEl.scrollHeight;
+        }
+
+       // Secure Serverless Gemini API Call
+async function callGeminiApi(userQuery) {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'typing-indicator';
+    loadingDiv.className = 'flex justify-start';
+    loadingDiv.innerHTML = `
+        <div class="flex items-center space-x-2 bg-white px-4 py-2 rounded-2xl border border-slate-200 text-xs text-slate-400">
+            <i class="fa-solid fa-spinner animate-spin text-blue-500"></i>
+            <span>Gemini is thinking...</span>
+        </div>
+    `;
+    document.getElementById('chat-window').appendChild(loadingDiv);
+
+    try {
+        // Send request to your Vercel serverless backend function
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userQuery: userQuery })
+        });
+
+        const data = await response.json();
+        document.getElementById('typing-indicator')?.remove();
+
+        if (!response.ok) {
+            throw new Error(data.error || "The assistant service returned an error.");
+        }
+        if (data.reply) {
+            appendMessage('ai', data.reply);
+        } else {
+            appendMessage('ai', "I couldn't generate a response right now. Please try again.");
+        }
+    } catch (err) {
+        console.error(err);
+        document.getElementById('typing-indicator')?.remove();
+        appendMessage('ai', "Unable to connect to the backend assistant service. Please try again later.");
+    }
+}
+    </script>
+</body>
+</html>
